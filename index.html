@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Expense Tracker</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+</head>
+<body>
+
+<div class="app">
+  <!-- sidebar -->
+  <aside class="sidebar">
+    <header class="main-header">
+      <div class="logo">
+        <svg class="wallet-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/><path d="M4 6v12a2 2 0 0 0 2 2h14v-4"/><path d="M18 12a2 2 0 0 0-2 2c0 1.1.9 2 2 2h4v-4h-4z"/></svg>
+        <h1>Expense <br><span class="text-blue">Tracker</span></h1>
+      </div>
+    </header>
+    <hr class="sidebar-divider">
+
+    <div class="tabs">
+      <button class="tab-btn active" data-page="home">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg> Dashboard
+      </button>
+      <button class="tab-btn" data-page="transactions">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg> Transactions
+      </button>
+      <button class="tab-btn" data-page="report">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg> Report
+      </button>
+    </div>
+  </aside>
+
+  <!-- content wrapper -->
+  <main class="content">
+    <div class="page active" id="page-home">
+      
+      <!-- Balance showing card -->
+      <div class="dashboard-grid">
+        <div class="card balance-card" style="justify-content: space-between; flex-shrink: 0;">
+          
+          <!-- Top -->
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+            <div class="label" style="margin-bottom: 0; font-size: 1.2rem; color: rgba(238, 238, 238, 0.913); font-weight: 800;">TOTAL BALANCE</div>
+            <div class="icon-wrapper blue" style="margin-bottom: 0; width: 50px; height: 50px; background: rgba(0,0,0,0.1); color: rgba(238, 238, 238, 0.913);">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/><path d="M4 6v12a2 2 0 0 0 2 2h14v-4"/><path d="M18 12a2 2 0 0 0-2 2c0 1.1.9 2 2 2h4v-4h-4z"/></svg>
+            </div>
+          </div>
+          
+          <!-- Middle Amount -->
+          <div class="value" id="homeBalance" style="font-size: 2.9rem; margin-bottom: 28px; color: white;">₹0</div>
+          
+          <!-- Bottom -->
+          <div style="display: flex; justify-content: space-between; align-items: flex-end; border-top: 1px solid rgba(185, 185, 185, 0.913); padding-top: 16px;">
+            <div class="subtitle" style="margin-bottom: 0; color: rgba(238, 238, 238, 0.913); font-weight: 600;">Total income minus expenses</div>
+            
+            <div class="date-badge" style="position: static; font-size: 1rem; font-weight: 600; color: rgba(238, 238, 238, 0.913); background: rgba(0,0,0,0.05);">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> 
+              <span id="currentDate">Today</span>
+            </div>
+          </div>
+
+        </div>
+        
+        <div class="side-cards">
+          <div class="card income-card">
+            <div class="icon-circle green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg></div>
+            <div class="card-info">
+              <div class="label">INCOME</div>
+              <div class="value text-green" id="homeIncome">₹0</div>
+            </div>
+          </div>
+
+          <button class="fab" id="fabAdd">+</button>
+
+          <div class="card expense-card">
+            <div class="icon-circle red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg></div>
+            <div class="card-info">
+              <div class="label">EXPENSE</div>
+              <div class="value text-red" id="homeExpense">₹0</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Overview Panel -->
+      <div class="panel overview-panel">
+        <div class="panel-header" style="margin-bottom: 24px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+          <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="icon-chart" style="width: 22px; height: 22px; color: var(--color-blue); margin-right: 10px;"><path d="M18 20V10M12 20V4M6 20v-6"/></svg> Overview</h2>
+          
+          <div class="overview-controls" style="display: flex; gap: 12px; align-items: center;">
+            <button id="btnOverviewMonth" class="btn-sm active" style="cursor: pointer; background: var(--pill-bg-blue); color: var(--color-blue); border: 1px solid var(--color-blue);">This Month</button>
+            <select id="overviewCategoryFilter" class="btn-sm" style="appearance: auto; cursor: pointer; background: var(--bg-dark); border: 1px solid var(--border); color: var(--text-main);">
+              <option value="default" hidden selected>Categories</option>
+              <option value="expense">Categories: Expense</option>
+              <option value="income">Categories: Income</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="overview-content" style="display: flex; gap: 24px; flex-wrap: wrap; align-items: center;">
+          <!-- Left Side Chart -->
+          <div class="overview-chart-wrap" style="flex: 1.2; min-width: 220px; height: 240px; position: relative; display: flex; justify-content: center;">
+            <canvas id="overviewChartCanvas"></canvas>
+          </div>
+          
+          <!-- Right Side Stats -->
+          <div id="overviewStats" style="flex: 1; min-width: 200px; display: flex; flex-direction: column; gap: 16px; justify-content: center; background: var(--bg-dark); padding: 20px; border-radius: 16px; border: 1px solid var(--border);">
+            <div class="stat-box">
+              <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px; font-weight: 600;">TODAY'S INCOME</div>
+              <div id="statTodayIncome" style="font-size: 1.2rem; font-weight: 700; color: var(--color-green);">₹0</div>
+            </div>
+            <div class="stat-box">
+              <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px; font-weight: 600;">TODAY'S EXPENSE</div>
+              <div id="statTodayExpense" style="font-size: 1.2rem; font-weight: 700; color: var(--color-red);">₹0</div>
+            </div>
+            <div style="border-top: 1px solid var(--border); margin: 4px 0;"></div>
+            <div class="stat-box">
+              <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px; font-weight: 600;">HIGHEST INCOME</div>
+              <div id="statHighIncome" style="font-size: 1.2rem; font-weight: 700; color: var(--color-green);">₹0</div>
+            </div>
+            <div class="stat-box">
+              <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px; font-weight: 600;">HIGHEST EXPENSE</div>
+              <div id="statHighExpense" style="font-size: 1.2rem; font-weight: 700; color: var(--color-red);">₹0</div>
+            </div>
+          </div>
+
+          <!-- Right Side Legend for Categories -->
+          <div id="overviewLegend" style="display: none; flex: 1; min-width: 200px; flex-direction: column; gap: 12px; background: var(--bg-dark); padding: 20px; border-radius: 16px; border: 1px solid var(--border); max-height: 240px; overflow-y: auto;">
+          </div>
+        </div>
+      </div>
+
+      <div class="panel list-panel">
+        <div class="panel-header">
+          <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="icon-clock"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> Recent transaction</h2>
+          <button class="link-btn" id="goToTransactionsFromRecent">View all ❯</button>
+        </div>
+        <div id="recentList" class="transaction-list"></div>
+      </div>
+
+    </div>
+    <!-- TRANSACTIONS PAGE -->
+    <div class="page" id="page-transactions">
+      <h2 class="page-title">Transactions:</h2>
+      
+      <div class="panel tx-panel">
+        <div class="tx-filter-bar">
+          <div class="tx-filter-label" id="currentMonthLabel">All Months</div>
+          <div class="tx-filter-controls">
+            
+            <button class="icon-box" id="txToggleGraphBtn" title="Toggle Graph">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+            </button>
+            
+            <select id="txMonthFilter">
+              <option value="all">select month</option>
+            </select>
+            <select id="txTypeFilter" class="btn btn-secondary btn-sm" style="appearance: auto;">
+              <option value="all">Filter: All</option>
+              <option value="income">Income</option>
+              <option value="expense">Expense</option>
+              <option value="category">Category...</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="tx-chart-section" id="txChartSection" style="display: none; margin-bottom: 24px;">
+          <div class="type-toggle tx-tabs" style="margin-bottom: 16px;">
+            <button type="button" data-view="all" class="active">Overview</button>
+            <button type="button" data-view="income">Income</button>
+            <button type="button" data-view="expense">Expense</button>
+          </div>
+          
+          <div class="chart-wrap" style="height: 220px; width: 100%; position: relative;">
+            <div id="txChartBalanceContainer" style="position: absolute; top: 10px; right: 10px; text-align: right; pointer-events: none;">
+              <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600; letter-spacing: 0.5px;">BALANCE</div>
+              <div id="txChartBalance" style="font-size: 1.4rem; font-weight: 700;">₹0</div>
+            </div>
+            <canvas id="txChartCanvas"></canvas>
+          </div>
+        </div>
+            
+        <div id="allTransactionsList" class="grouped-tx-list">
+          
+        </div>
+      </div>
+    </div>
+
+    <!-- REPORT PAGE -->
+    <div class="page" id="page-report">
+      <h2 class="page-title">Monthly Report: <span id="reportMonthLabel" style="color: var(--color-blue);"></span></h2>
+      <div class="panel" style="margin-top: 24px;">
+        <div id="reportContent">
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+
+<!-- Add ,Edit  -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="formTitle">Add Transaction</h2>
+      <button class="modal-close" id="modalCloseBtn">✕</button>
+    </div>
+    <div class="type-toggle">
+      <button type="button" data-type="income" class="active">Income</button>
+      <button type="button" data-type="expense">Expense</button>
+    </div>
+    <div class="form-grid">
+      <div class="field">
+        <label for="amount">Amount (₹)</label>
+        <input type="number" id="amount" placeholder="0" step="1" min="0">
+      </div>
+      <div class="field">
+        <label for="date">Date</label>
+        <input type="date" id="date">
+      </div>
+      <div class="field">
+        <label for="category">Category</label>
+        <select id="category"></select>
+      </div>
+      <div class="field">
+        <label for="description">Description</label>
+        <input type="text" id="description" placeholder="e.g. Salary">
+      </div>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-secondary" id="cancelEditBtn">Cancel</button>
+      <button class="btn btn-primary" id="saveBtn">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- Category Select cheyan-->
+<div class="modal-overlay" id="categoryFilterModal">
+  <div class="modal" style="max-width: 320px;">
+    <div class="modal-header">
+      <h2>Select Category</h2>
+      <button class="modal-close" id="categoryFilterClose">✕</button>
+    </div>
+    <div class="field">
+      <select id="categoryFilterSelect"></select>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-primary" id="applyCategoryFilterBtn">Apply Filter</button>
+    </div>
+  </div>
+</div>
+<!-- Transaction Info -->
+<div class="modal-overlay" id="infoModalOverlay">
+  <div class="modal" style="max-width: 350px;">
+    <div class="modal-header">
+      <h2>Transaction Details</h2>
+      <button class="modal-close" id="infoModalClose">✕</button>
+    </div>
+    <div id="infoModalContent" style="margin-top: 16px; line-height: 1.8; font-size: 1rem;">
+      
+    </div>
+  </div>
+</div>
+<!-- Delete data -->
+<div class="modal-overlay" id="deleteModalOverlay">
+  <div class="modal" style="max-width: 320px; text-align: center;">
+    <div class="modal-header" style="justify-content: center; padding-bottom: 0;">
+      <h2 style="color: var(--color-red);">Delete Transaction?</h2>
+    </div>
+    <div style="margin: 20px 0; color: var(--text-muted); font-size: 0.95rem;">
+      Are you sure you want to delete this transaction? This cannot be undone.
+    </div>
+    <div class="form-actions" style="justify-content: center; gap: 16px;">
+      <button class="btn btn-secondary" id="cancelDeleteBtn">Cancel</button>
+      <button class="btn" id="confirmDeleteBtn" style="background: var(--color-red); color: white; border: none;">Delete</button>
+    </div>
+  </div>
+</div>
+<script src="script.js"></script>
+
+<div id="toast-container" class="toast-container"></div>
+
+</body>
+</html>
